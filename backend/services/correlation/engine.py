@@ -137,8 +137,9 @@ def _assemble_campaign(
         asset: Asset = entry["asset"]
         brand: Optional[Brand] = entry["brand"]
 
-        if det.final_score > max_score:
-            max_score = det.final_score
+        score_val = float(det.final_score or 0.0)
+        if score_val > max_score:
+            max_score = score_val
 
         ts = asset.first_seen or det.created_at
         if ts:

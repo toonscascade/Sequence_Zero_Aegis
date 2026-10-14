@@ -179,7 +179,7 @@ Aegis is configured for 1-click deployment on [Vercel](https://vercel.com):
    - `VITE_SUPABASE_ANON_KEY`: *(your Supabase anon key)*
 5. Click **Deploy**!
 
-👉 **Detailed multi-option guide with serverless database configurations: [VERCEL_DEPLOYMENT.md](file:///d:/BYTEXL_HACKATHON/Whole_Project/ByteXl/Aegisshield_Production/VERCEL_DEPLOYMENT.md).**
+👉 **Detailed multi-option guide with serverless database configurations: [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md).**
 
 ---
 

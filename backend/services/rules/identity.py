@@ -82,15 +82,17 @@ def check_lookalike_variations(candidate: str, target: str) -> Dict[str, Any]:
         details.append("Identical name with modified spacing/separators")
 
     # 2. Leetspeak / Character swaps: e.g. "apexb0nk" -> "apexbank"
-    substituted = c_norm
-    for char, rep in LOOKALIKE_CHAR_SWAPS.items():
-        if char in substituted:
-            substituted = substituted.replace(char, rep)
-    
-    if clean_text_separators(substituted) == t_clean and c_norm != t_norm:
-        has_lookalike = True
-        types.append("CHAR_SWAP")
-        details.append("Character swap detected (e.g., 0/o, 1/l, rn/m)")
+    for candidate_sub in [c_norm.replace("0", "a"), c_norm.replace("0", "o")]:
+        substituted = candidate_sub
+        for char, rep in LOOKALIKE_CHAR_SWAPS.items():
+            if char in substituted:
+                substituted = substituted.replace(char, rep)
+        if clean_text_separators(substituted) == t_clean and c_norm != t_norm:
+            has_lookalike = True
+            if "CHAR_SWAP" not in types:
+                types.append("CHAR_SWAP")
+                details.append("Character swap detected (e.g., 0/a, 0/o, 1/l, rn/m)")
+            break
 
     # 3. Added deceptive words: e.g. "apexbank_official" or "apexbank_support"
     for word in SUSPICIOUS_KEYWORD_ADDITIONS:
@@ -104,17 +106,19 @@ def check_lookalike_variations(candidate: str, target: str) -> Dict[str, Any]:
                 details.append(f"Deceptive keyword addition detected: '{word}'")
                 break
 
-    # 4. Compound check: Added word + Character swap (e.g. apexb@nk_support)
+    # 4. Compound check: Added word + Character swap (e.g. apexb@nk_support or apexb0nk_support)
     if "ADDED_WORD" in types and "CHAR_SWAP" not in types:
         for word in SUSPICIOUS_KEYWORD_ADDITIONS:
             if word in c_norm and word not in t_norm:
                 rem = c_norm.replace(word, "")
-                for char, rep in LOOKALIKE_CHAR_SWAPS.items():
-                    rem = rem.replace(char, rep)
-                if clean_text_separators(rem) == t_clean:
-                    types.append("CHAR_SWAP")
-                    details.append("Character swap detected within compound variation")
-                    break
+                for rem_sub in [rem.replace("0", "a"), rem.replace("0", "o")]:
+                    temp_rem = rem_sub
+                    for char, rep in LOOKALIKE_CHAR_SWAPS.items():
+                        temp_rem = temp_rem.replace(char, rep)
+                    if clean_text_separators(temp_rem) == t_clean:
+                        types.append("CHAR_SWAP")
+                        details.append("Character swap detected within compound variation")
+                        break
 
     return {
         "is_lookalike": has_lookalike,

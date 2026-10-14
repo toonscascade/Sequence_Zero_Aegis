@@ -49,6 +49,16 @@ app.add_middleware(
 # --------------- Database ---------------
 try:
     Base.metadata.create_all(bind=engine)
+    from db.models import Brand
+    from db.session import SessionLocal
+    with SessionLocal() as db_init:
+        if db_init.query(Brand).first() is None:
+            print("[Aegis] Initializing database with demo fixtures...")
+            try:
+                from db.seed import seed_database
+                seed_database()
+            except Exception as seed_err:
+                print(f"[Aegis] Auto-seed warning: {seed_err}")
 except Exception as e:
     print(f"[Aegis] Warning during table initialization: {e}")
 

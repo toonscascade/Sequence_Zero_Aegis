@@ -331,12 +331,12 @@ async def analyze_app(payload: Dict[str, Any], db: Session = Depends(get_db)):
     store_info = None
     if candidate_package_name and "." in candidate_package_name:
         try:
-            store_info = verify_google_play_package(candidate_package_name, timeout=1.2)
+            store_info = await asyncio.to_thread(verify_google_play_package, candidate_package_name, 1.2)
         except Exception as ex:
             logger.debug("Google Play live store verification skipped: %s", ex)
     elif candidate_app_name:
         try:
-            store_info = verify_apple_itunes_app(candidate_app_name, timeout=1.2)
+            store_info = await asyncio.to_thread(verify_apple_itunes_app, candidate_app_name, 1.2)
         except Exception as ex:
             logger.debug("Apple iTunes live store verification skipped: %s", ex)
 

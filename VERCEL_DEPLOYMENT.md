@@ -40,7 +40,7 @@ Deploy the entire project as a single Vercel service where the frontend and back
    - Project Name: `aegis`
 
 3. **Configure Project Settings**:
-   The included [vercel.json](file:///d:/BYTEXL_HACKATHON/Whole_Project/ByteXl/Aegisshield_Production/vercel.json) at the root automatically configures the build:
+   The included [vercel.json](./vercel.json) at the root automatically configures the build:
    - **Framework Preset**: `Other`
    - **Build Command**: `cd frontend && npm install && npm run build`
    - **Output Directory**: `frontend/dist`
@@ -82,10 +82,10 @@ If you prefer hosting the FastAPI backend on a dedicated container service (like
    VITE_SUPABASE_URL=https://qqmpnhrcxshkxggqjjrq.supabase.co
    VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
    ```
-4. Deploy! The included [frontend/vercel.json](file:///d:/BYTEXL_HACKATHON/Whole_Project/ByteXl/Aegisshield_Production/frontend/vercel.json) guarantees that SPA routes (`/app`, `/app/analyzer`, `/app/account`, `/login`) do not 404 when refreshed in the browser.
+4. Deploy! The included [frontend/vercel.json](./frontend/vercel.json) guarantees that SPA routes (`/app`, `/app/analyzer`, `/app/account`, `/login`) do not 404 when refreshed in the browser.
 
 ### Part B: Deploy Backend
-1. **On Vercel**: Set root directory to `backend`, deploy using [backend/vercel.json](file:///d:/BYTEXL_HACKATHON/Whole_Project/ByteXl/Aegisshield_Production/backend/vercel.json).
+1. **On Vercel**: Set root directory to `backend`, deploy using [backend/vercel.json](./backend/vercel.json).
 2. **On Render / Railway**:
    - Build Command: `pip install -r requirements.txt`
    - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
@@ -96,7 +96,7 @@ If you prefer hosting the FastAPI backend on a dedicated container service (like
 
 Vercel Serverless Functions operate on a read-only filesystem, with `/tmp` being the only writable directory.
 
-Aegis solves this natively in [backend/db/session.py](file:///d:/BYTEXL_HACKATHON/Whole_Project/ByteXl/Aegisshield_Production/backend/db/session.py):
+Aegis solves this natively in [backend/db/session.py](./backend/db/session.py):
 1. **Zero-Config SQLite**: When running on Vercel (`VERCEL=1`), the pre-seeded `aegis.db` is automatically mirrored into `/tmp/aegis.db`. Writes, investigations, and verdicts work seamlessly during runtime.
 2. **Enterprise Postgres**: If you provide a Supabase or Neon connection string via `DATABASE_URL`, Aegis automatically switches to remote PostgreSQL with connection pooling.
 
